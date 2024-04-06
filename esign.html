@@ -11,10 +11,14 @@
             border: 2px solid #000;
             background-color: #fff;
             cursor: crosshair;
-            width: 100%;
-            max-width: 500px;
-            height: 40vh;
-            margin: 0 auto;
+            width: 100%; /* Adjusted width to be 100% */
+            height: 60vh; /* Adjusted height to be 60% of the viewport height */
+            display: block;
+            margin: 0 auto; /* Centering the whiteboard horizontally */
+        }
+
+        .container {
+            margin-top: 20px; /* Added some margin for better spacing */
         }
     </style>
 </head>
@@ -43,8 +47,8 @@
         </div>
     </nav>
 
-    <div class="container mt-5">
-        <div class="container-fluid">
+    <div class="container">
+        <div class="row">
             <div class="col-md-8 offset-md-2 text-center">
                 <h1 class="mb-4 display-3 font-weight-bold text-success">Sign Here</h1>
                 <canvas id="whiteboard" class="mb-3"></canvas>
@@ -63,7 +67,8 @@
         // Initialize signature pad
         var canvas = document.querySelector("#whiteboard");
         var signaturePad = new SignaturePad(canvas, {
-            backgroundColor: 'rgb(255, 255, 255)'
+            backgroundColor: 'rgb(255, 255, 255)',
+            penColor: 'black' // Added pen color to ensure drawing visibility
         });
 
         // Resize the canvas to fill browser window dynamically
@@ -71,11 +76,9 @@
         resizeCanvas();
 
         function resizeCanvas() {
-            var ratio = window.devicePixelRatio || 1;
-            var canvasWidth = canvas.offsetWidth;
-            var canvasHeight = canvasWidth * 0.4; // Adjusted to maintain aspect ratio
-            canvas.width = canvasWidth * ratio;
-            canvas.height = canvasHeight * ratio;
+            var ratio = Math.max(window.devicePixelRatio || 1, 1);
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
             canvas.getContext("2d").scale(ratio, ratio);
             signaturePad.clear();
         }
