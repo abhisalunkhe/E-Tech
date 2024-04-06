@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Resizer</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">E-Tech</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="./index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./esign.html">E-Sign</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="">Image Resize</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h2 class="text-center mb-4 display-3 font-weight-bold text-success">Image Resizer</h2>
+                <form id="imageForm">
+                    <div class="form-group">
+                        <label for="imageInput">Choose Image:</label>
+                        <input type="file" class="form-control-file" id="imageInput" accept="image/*" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="imageWidth">Width (px):</label>
+                        <input type="number" class="form-control" id="imageWidth" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="imageHeight">Height (px):</label>
+                        <input type="number" class="form-control" id="imageHeight" min="1" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Resize & Download</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('imageForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            var width = document.getElementById('imageWidth').value;
+            var height = document.getElementById('imageHeight').value;
+            var fileInput = document.getElementById('imageInput');
+            if (fileInput.files.length === 0) {
+                alert('Please choose an image.');
+                return;
+            }
+            alert('It may affect the quality of image');
+            var file = fileInput.files[0];
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var img = new Image();
+                img.onload = function () {
+                    var canvas = document.createElement('canvas');
+                    var ctx = canvas.getContext('2d');
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    canvas.toBlob(function (blob) {
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'resized_image_' + width + 'x' + height + '.' + file.type.split('/')[1];
+                        link.click();
+                    }, file.type);
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    </script>
+</body>
+</html>

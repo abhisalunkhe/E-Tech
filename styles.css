@@ -1,0 +1,16 @@
+/* Custom CSS to align the container vertically */
+.container-fluid.d-flex {
+    min-height: 80vh;
+}
+
+.container-fluid h1{
+    font-size: 5rem;
+}
+
+.container-fluid p{
+    font-size: 2rem;
+}
+
+.btn {
+    font-size: 25px; /* Adjust the font size as needed */
+}

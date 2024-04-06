@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Signature Page</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #whiteboard {
+            border: 2px solid #000;
+            background-color: #fff;
+            cursor: crosshair;
+            height: 15rem;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">E-Tech</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="./index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="">E-Sign</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./imageResizer.html">Image Resize</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="container-fluid">
+            <div class="col-md-8 offset-md-2 text-center">
+                <h1 class="mb-4 display-3 font-weight-bold text-success">Sign Here</h1>
+                <canvas id="whiteboard" class="mb-3"></canvas>
+                <div class="container-fluid">
+                    <button id="saveSignBtn" class="btn btn-primary">Download Signature</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/signature_pad"></script>
+    <script>
+        // Initialize signature pad
+        var canvas = document.querySelector("#whiteboard");
+        var signaturePad = new SignaturePad(canvas, {
+            backgroundColor: 'rgb(255, 255, 255)'
+        });
+
+        // Resize the canvas to fill browser window dynamically
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function resizeCanvas() {
+            var ratio = window.devicePixelRatio || 1;
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext("2d").scale(ratio, ratio);
+            signaturePad.clear();
+        }
+
+        // Save signature
+        document.getElementById('saveSignBtn').addEventListener('click', function () {
+            if (!signaturePad.isEmpty()) {
+                var dataURL = signaturePad.toDataURL(); // Get the image data URL
+                downloadImage(dataURL);
+            } else {
+                alert('Please provide your signature.');
+            }
+        });
+
+        // Function to download signature as JPEG or PNG image
+        function downloadImage(dataURL) {
+            // Create an anchor element
+            var anchor = document.createElement('a');
+            anchor.href = dataURL;
+            anchor.download = 'signature.png'; // Change the file name and extension as needed (e.g., 'signature.jpg' for JPEG)
+            anchor.click(); // Trigger the download
+            alert('Signature downloaded successfully!');
+        }
+    </script>
+</body>
+
+</html>
